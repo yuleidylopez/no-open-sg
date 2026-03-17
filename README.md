@@ -1,3 +1,7 @@
+![Terraform](https://img.shields.io/badge/Terraform-IaC-blue)
+![Policy as Code](https://img.shields.io/badge/Policy--as--Code-Rego-green)
+![Security](https://img.shields.io/badge/Security-Validated-red)
+
 # 🚫 Block Open Security Groups with Policy as Code
 
 ## Project Overview
