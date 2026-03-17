@@ -38,6 +38,10 @@ This project uses:
 
 If Terraform attempts to deploy a resource with open SSH or RDP access, the policy **fails the test and blocks deployment**.
 
+## Architecture Flow
+
+Terraform → Terraform Plan → JSON → Conftest → Rego Policy → Pass / Fail
+
 ---
 
 ## Tools Used
