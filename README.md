@@ -1,52 +1,136 @@
-# Cloud Security Policy: Block Open Security Groups
+# 🚫 Block Open Security Groups with Policy as Code
 
-## Overview
-This project demonstrates how to prevent insecure cloud configurations using Policy as Code.
+## Project Overview
+This project demonstrates how to detect and prevent insecure cloud configurations using **Policy as Code**.
 
-The policy blocks security group rules that allow public access (0.0.0.0/0) to sensitive ports such as SSH (22) and RDP (3389).
+The policy blocks security group rules that allow public internet access (`0.0.0.0/0`) to sensitive ports such as:
 
-## Tools Used
-- Terraform
-- Rego
-- Conftest
-- GitHub Codespaces
+- SSH (Port 22)
+- RDP (Port 3389)
 
-## The Problem
-Many cloud environments accidentally expose servers to the internet.
+These misconfigurations are among the most common causes of cloud breaches.
 
-Example of insecure rule:
+---
+
+## Security Problem
+
+Many cloud deployments accidentally expose servers to the public internet.
+
+Example of a dangerous configuration:
 
 0.0.0.0/0 → Port 22 (SSH)
 
-Attackers constantly scan the internet for these open ports.
+Attackers continuously scan for these open ports to gain unauthorized access.
 
-## The Solution
-A Rego policy automatically blocks Terraform configurations that expose sensitive ports.
+---
 
-## How It Works
+## Solution
 
-1. Terraform generates a plan.
-2. The plan is converted to JSON.
-3. Conftest evaluates the JSON using Rego policies.
-4. If a rule violates the policy, deployment fails.
+This project uses:
 
-## Run the Test
+- Terraform to simulate infrastructure
+- Rego policy to define security rules
+- Conftest to evaluate configurations
+
+If Terraform attempts to deploy a resource with open SSH or RDP access, the policy **fails the test and blocks deployment**.
+
+---
+
+## Tools Used
+
+- Terraform
+- Rego (Open Policy Agent)
+- Conftest
+- GitHub Codespaces
+
+---
+
+## Project Structure
+
+no-open-sg/
+
+README.md
+
+sg.tf
+
+conftest.toml
+
+policy/
+
+deny-open-sg.rego
+
+
+---
+
+## How to Run the Test
+
+Inside the Codespace terminal:
+
+Initialize Terraform:
 
 terraform init
 
+Create Terraform plan:
+
 terraform plan -out=tfplan.binary
+
+Convert plan to JSON:
 
 terraform show -json tfplan.binary > input.json
 
+Run policy test:
+
 conftest test input.json --all-namespaces
+
+Expected result:
+
+FAIL - input.json - main - Open SSH access (port 22) to the internet is not allowed.
+
+---
+
+## Fixing the Configuration
+
+Update the insecure CIDR block in `sg.tf`:
+
+Replace:
+
+0.0.0.0/0
+
+With a restricted internal network:
+
+10.0.0.0/16
+
+Re-run the test to verify that the configuration now passes.
+
+---
 
 ## Compliance Mapping
 
-This policy supports controls from NIST SP 800-53:
+This policy supports several security controls from NIST SP 800-53:
 
 AC-4 – Information Flow Enforcement  
 AC-6 – Least Privilege  
 SC-7 – Boundary Protection  
+SC-7(3) – Deny by Default  
+SI-4 – System Monitoring
+
+By preventing public exposure of management ports, the policy reduces attack surface and enforces secure network boundaries.
+
+---
+
+## Why This Matters
+
+Open security groups are a leading cause of cloud security incidents.  
+Automating security checks with policy-as-code helps organizations:
+
+- Prevent misconfigurations
+- Enforce security policies automatically
+- Maintain compliance with federal frameworks
+- Protect cloud infrastructure from external attacks
+
+---
 
 ## Author
-Yuleidy Lopez
+
+Yuleidy Lopez  
+Cloud Security / GRC Portfolio Project
