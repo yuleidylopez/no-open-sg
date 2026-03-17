@@ -124,6 +124,13 @@ SI-4 – System Monitoring
 
 By preventing public exposure of management ports, the policy reduces attack surface and enforces secure network boundaries.
 
+## Risk Mitigation
+
+Risk:
+Public exposure of SSH/RDP ports.
+
+Mitigation:
+Automated policy enforcement using Conftest and Rego.
 ---
 
 ## Why This Matters
@@ -135,6 +142,14 @@ Automating security checks with policy-as-code helps organizations:
 - Enforce security policies automatically
 - Maintain compliance with federal frameworks
 - Protect cloud infrastructure from external attacks
+
+## Future Improvement: CI/CD Integration
+
+This policy can be integrated into GitHub Actions so that:
+
+- Every pull request is automatically scanned
+- Insecure infrastructure changes fail before merge
+- Security is enforced before deployment
 
 ---
 
